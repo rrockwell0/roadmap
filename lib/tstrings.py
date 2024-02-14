@@ -8,6 +8,9 @@ def bracket(instring):
 
 
 class Tstr(str):
+    """
+    Developed personally by Randy Rockwell copyright April 5th, 2020
+    """
     def __init__(self, template):
         if os.path.exists(template):
             template = open(template, 'r').read()

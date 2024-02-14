@@ -13,6 +13,8 @@ class GraphViz:
 
     Call write_dot to create the GraphViz dot file.
     Call rendergraphs afterwords to create the png image.
+
+    Developed personally by Randy Rockwell copyright April 5th, 2020
     """
     def __init__(self):
         self.directory = ''
