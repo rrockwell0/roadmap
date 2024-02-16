@@ -2,18 +2,22 @@ import os
 import csv
 from lib.graphviz import GraphViz, Group, Node, Edge
 
+local_db = 'db.sqlite'
+
 
 def build_full_diagram():
     data = {}
     gv = GraphViz()
-    gv.directory = 'output/'
     gv.name = 'rd'
     gv.title = 'LIMS Roadmap Detail'
     gv.fontcolor = 'orange'
-    folder = os.path.join('/', 'home', 'rrockwell', 'git', 'roadmap', 'data')
+    gv.directory = os.path.join('c:', os.sep, 'Users', 'Randy Rockwell', 'Desktop', 'roadmap_output')
+
+    folder = os.path.join('c:', os.sep, 'Users', 'Randy Rockwell', 'Downloads')
     for file in os.listdir(folder):
-        if '.tsv' in file:
-            with open(os.path.join(folder, file)) as infile:
+        if '.tsv' in file and 'LIMS Roadmap Function List' in file:
+            file_target = os.path.join(folder, file)
+            with open(file_target) as infile:
                 csvfile = csv.reader(infile, delimiter="\t")
                 for row in csvfile:
                     uid = row[0]
@@ -39,6 +43,7 @@ def build_full_diagram():
                                 e.arrowhead = 'normal'
                                 e.color = 'orange'
                                 gv.edges += [e]
+            os.remove(file_target)
     for name, group in data.items():
         gv.groups += [group]
     gv.write_dot(vertical=False)

@@ -60,12 +60,12 @@ class GraphViz:
 
         self.outfile_contents += '\n}'
 
-        target = self.directory + self.name + '.dot'
+        target = os.path.join(self.directory, self.name + '.dot')
         with open(target, 'w') as outfile:
             outfile.write(self.outfile_contents)
 
     def rendergraphs(self):
-        target = 'dot -Tpng -v -O ' + self.directory + self.name + '.dot'
+        target = f'dot -Tpng -v -O "{os.path.join(self.directory, self.name + ".dot")}"'
         print(target)
         os.system(target)
 
