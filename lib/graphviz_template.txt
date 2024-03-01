@@ -1,10 +1,13 @@
 digraph GraphName {
     splines=ortho;
+    compound=true;
 	fontname="Arial";
 	fontsize="{fontsize_title}";
     label="{label}";
+    labelloc="t";
 {orientation}	bgcolor="#ffffff";
     fontcolor="{fontcolor}";
+    graph [pad="1", nodesep="{nodesep}"];
 
     node [shape=box, style=filled, color="#2d635b", fillcolor="#d2e7f2", fontname="Arial", fontsize={fontsize_node}];
 

@@ -1,6 +1,8 @@
 import os
 from lib.tstrings import Tstr
 
+from random import randint
+
 
 class GraphViz:
     """
@@ -20,6 +22,7 @@ class GraphViz:
         self.directory = ''
         self.name = ''
         self.title = ''
+        self.subtitle = ''
         self.ungrouped_nodes = []
         self.groups = []
         self.edges = []
@@ -30,6 +33,7 @@ class GraphViz:
         }
         self.outfile_contents = ''
         self.fontcolor = "black"
+        self.nodesep = '1'
 
     def write_dot(self, vertical=True):
         if not os.path.exists(self.directory):
@@ -38,18 +42,16 @@ class GraphViz:
         if not vertical:
             orientation = '\trankdir="LR";\n'
         graphviz_start = Tstr('./lib/graphviz_template.txt')
-        label = self.title
+        label = self.title + '\n' + self.subtitle
         fontcolor = self.fontcolor
         fontsize_title = str(self.fontsize['title'])
         fontsize_node = str(self.fontsize['node'])
+        nodesep = self.nodesep
         graphviz_start.eval(locals())
         self.outfile_contents = str(graphviz_start)
 
-        id = 1
         for group in self.groups:
-            group.id = id
             self.outfile_contents += str(group)
-            id += 1
 
         for node in self.ungrouped_nodes:
             self.outfile_contents += str(node)
@@ -73,26 +75,32 @@ class GraphViz:
 class Group:
     """Group of Nodes"""
     def __init__(self):
-        self.id = 0
+        self.id = randint(100000, 999999)
         self.name = "missingname"
         self.fontcolor = "#92d0c1"
         self.color = "#92d0c1"
         self.fontsize = 24
         self.style = "rounded"
         self.nodes = []
+        self.groups = []
 
     def __str__(self):
         nodestring = ''
+        groupstring = ''
         for node in self.nodes:
             nodestring += str(node)
+        for group in self.groups:
+            groupstring += str(group)
         return (
-            f'subgraph cluster{self.id} {{\n'
+            f'subgraph cluster_{self.id} {{\n'
             f'label = "{self.name}";\n'
             f'fontsize={self.fontsize};\n'
             f'style="{self.style}";\n'
             f'color="{self.color}";\n'
             f'fontcolor="{self.fontcolor}";\n'
             f'{nodestring}'
+            
+            f'{groupstring}'
             '}\n\n'
         )
 
@@ -131,11 +139,12 @@ class Edge:
         self.color = '#2d635b'
         self.arrowhead = 'none'
         self.double = False
+        self.post_text = ''
 
     def __str__(self):
         double = ''
         if self.double:
             double = f' dir="both" arrowtail={self.arrowhead}'
         return (
-            f'"{self.start}" -> "{self.end}" [color="{self.color}" arrowhead={self.arrowhead}{double}]\n'
+            f'"{self.start}" -> "{self.end}" [color="{self.color}" arrowhead={self.arrowhead}{double} {self.post_text}]\n'
         )

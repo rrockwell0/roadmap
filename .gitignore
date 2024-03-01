@@ -3,4 +3,4 @@ venv
 .idea
 data/*
 output/*
-db.sqlite
+db.sqlite3
